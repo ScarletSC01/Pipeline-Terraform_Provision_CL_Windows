@@ -38,10 +38,12 @@ pipeline {
   }
 
   // =============================
-  // Variable de país oculta
+  // Variable oculta de país
   // =============================
   environment {
-    COUNTRY = 'Chile'  // Variable oculta, no visible en el formulario
+    COUNTRY = 'Chile'  // No visible en el formulario Jenkins
+    TF_BUCKET = 'tfstate-chile' // Bucket GCS para el backend remoto
+    TF_PREFIX = 'gcp-vm'
   }
 
   // =============================
@@ -50,7 +52,7 @@ pipeline {
   stages {
     stage('Preparar entorno') {
       steps {
-        echo "Inicializando entorno para ${params.GCP_PROJECT_ID}..."
+        echo "Inicializando entorno para ${params.GCP_PROJECT_ID} (${env.COUNTRY})..."
         sh 'terraform --version'
       }
     }
@@ -79,7 +81,10 @@ pipeline {
     stage('Terraform Init') {
       steps {
         sh '''
-          terraform init -input=false
+          terraform init -input=false \
+            -backend-config="bucket=${TF_BUCKET}" \
+            -backend-config="prefix=${TF_PREFIX}" \
+            -backend-config="project=${GCP_PROJECT_ID}"
         '''
       }
     }
