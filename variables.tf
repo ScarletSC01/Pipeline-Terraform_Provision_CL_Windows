@@ -1,0 +1,13 @@
+variable "project_id" {}
+variable "region" {}
+variable "zone" {}
+variable "cpu_type" {}
+variable "vm_type" {}
+variable "disk_size" {}
+variable "os_type" {}
+variable "network_interface" {}
+variable "network_subnet" {}
+variable "enable_private_ip" {}
+variable "fw_rules" {}
+variable "gitclone_bbk" {}
+variable "country" {}
